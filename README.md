@@ -1,73 +1,125 @@
-# Welcome to your Lovable project
+# PlanExec
 
-## Project info
+**PlanExec** is a planner-driven agentic workflow execution engine designed to explore how AI systems should run reliably in production.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+Instead of chaining LLM calls, PlanExec separates **reasoning** from **execution** and treats workflows as **durable, observable systems** with retries, failure handling, and persistent state.
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## 🧠 Core Idea
 
-**Use Lovable**
+Most AI applications fail not because models are weak, but because execution is fragile.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+PlanExec is built around one principle:
 
-Changes made via Lovable will be committed automatically to this repo.
+> Use AI where reasoning matters (planning),  
+> keep execution deterministic, retryable, and debuggable.
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🏗️ Architecture Overview
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+PlanExec follows a **planner → orchestrator → agents** architecture:
 
-Follow these steps:
+1. **Planner Agent**
+   - Converts a high-level goal into a structured execution plan (JSON contract)
+   - Defines ordered steps, agent types, and expected outputs
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+2. **Workflow Orchestrator**
+   - Persists workflow and step state
+   - Executes steps sequentially
+   - Handles retries with exponential backoff
+   - Supports pause / abort without corrupting state
+   - Propagates failures safely
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+3. **Execution Agents**
+   - Stateless agents that execute individual steps
+   - Receive full context from persisted workflow state
+   - Return structured outputs for downstream steps
 
-# Step 3: Install the necessary dependencies.
-npm i
+4. **Supporting Agents**
+   - Critic Agent: validates outputs and detects failures
+   - Memory Agent: persists and retrieves contextual data
+   - Research Agent: enriches execution with external context
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+---
 
-**Edit a file directly in GitHub**
+## 🔁 Workflow Lifecycle
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+1. User submits a goal
+2. Planner agent generates an execution plan
+3. Plan is materialized into durable workflow steps
+4. Steps execute sequentially with retry handling
+5. Outputs are tracked and visualized in real time
+6. Workflow completes, fails, or pauses safely
 
-**Use GitHub Codespaces**
+---
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 📊 Observability
 
-## What technologies are used for this project?
+PlanExec includes a **timeline-based UI** that visualizes:
+- Step-by-step execution
+- Agent type per step
+- Inputs and outputs
+- Retry attempts and backoff
+- Workflow status (running / paused / failed / completed)
 
-This project is built with:
+This makes long-running workflows easy to debug and reason about.
 
-- Vite
+---
+
+## 🧩 Key Design Decisions
+
+- **Planner-only intelligence**  
+  Execution agents are intentionally non-creative to keep workflows deterministic.
+
+- **Durable state first**  
+  All workflows and steps are persisted to allow retries, recovery, and inspection.
+
+- **Agent contracts**  
+  All agents implement a shared base interface, making them swappable and extensible.
+
+- **Retry-aware execution**  
+  Failures are expected and handled explicitly with capped exponential backoff.
+
+---
+
+## 🛠️ Tech Stack
+
 - TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- React + Vite
+- Supabase (PostgreSQL)
+- Modular agent-based architecture
+- Async workflow orchestration
 
-## How can I deploy this project?
+---
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+## 🚀 Live Demo
 
-## Can I connect a custom domain to my Lovable project?
+👉 https://planexec.lovable.app/
 
-Yes, you can!
+---
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 📌 Motivation
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+PlanExec was built as a learning-focused system to understand:
+- workflow orchestration
+- failure handling in AI systems
+- separation of planning and execution
+- why production AI is more about systems than prompts
+
+---
+
+## 🔮 Future Improvements
+
+- Step-level idempotency keys
+- Conditional branching in workflows
+- Human-in-the-loop approvals
+- Streaming execution logs
+- Multi-user workflow isolation
+
+---
+
+## 📜 License
+
+MIT
