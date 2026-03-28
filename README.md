@@ -1,6 +1,6 @@
 # PlanExec
 
-**PlanExec** is a planner-driven agentic workflow execution engine designed to explore how AI systems should run reliably in production.
+**PlanExec** is a planner-driven agentic workflow execution engine designed to explore how AI systems should run reliably in production.lol
 
 Instead of chaining LLM calls, PlanExec separates **reasoning** from **execution** and treats workflows as **durable, observable systems** with retries, failure handling, and persistent state.
 
