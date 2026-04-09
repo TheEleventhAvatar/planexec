@@ -88,7 +88,7 @@ export class MemoryAgent extends BaseAgent {
       return {
         success: false,
         data: {},
-        message: 'Failed to consolidate memory',
+        message: 'Failed to build memory',
         error: errorMessage,
       };
     }
